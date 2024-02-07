@@ -47,7 +47,7 @@ app.post('/update-wish', async (req, res) => {
         const selectedWish = {
             ...jsonData.find((el, i) => {
                 index = i
-                return el.id === req.body.id
+                return el.id == req.body.id
             }),
             is_selected: req.body.is_selected
         }
