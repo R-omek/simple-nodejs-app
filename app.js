@@ -48,7 +48,7 @@ app.post('/update-wish', async (req, res) => {
             index = i
             return el.id == req.body.id
         })
-        if (found.is_selected === req.body.is_selected) {
+        if (foundGift.is_selected === req.body.is_selected) {
             res.status(409).send({error: 'Gift already reserved'});
         } else {
             const selectedWish = {
