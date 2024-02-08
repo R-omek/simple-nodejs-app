@@ -44,18 +44,23 @@ app.post('/update-wish', async (req, res) => {
         const jsonData = JSON.parse(data);
 
         let index
-        const selectedWish = {
-            ...jsonData.find((el, i) => {
-                index = i
-                return el.id == req.body.id
-            }),
-            is_selected: req.body.is_selected
+        const foundGift = jsonData.find((el, i) => {
+            index = i
+            return el.id == req.body.id
+        })
+        if (found.is_selected === req.body.is_selected) {
+            res.status(409).send({error: 'Gift already reserved'});
+        } else {
+            const selectedWish = {
+                ...foundGift,
+                is_selected: req.body.is_selected
+            }
+            jsonData.splice(index, 1, selectedWish)
+    
+            await fs.writeFile('data.json', JSON.stringify(jsonData))
+    
+            res.json({ success: true });
         }
-        jsonData.splice(index, 1, selectedWish)
-
-        await fs.writeFile('data.json', JSON.stringify(jsonData))
-
-        res.json({ success: true });
     } catch (error) {
         console.error('Error updating data:', error);
         res.status(500).send('Internal Server Error');
